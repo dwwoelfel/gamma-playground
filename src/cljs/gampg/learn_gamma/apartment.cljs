@@ -165,7 +165,9 @@
   (-> mv
       (geom/invert)
       (geom/transpose)
-      (mat/matrix44->matrix33)))
+      (mat/matrix44->matrix33)
+      (object-array)
+      ))
 
 (defn get-data [now p mv vertices normals diffuse texture texture-coords]
   (assert (and p mv vertices normals) (str "Inputs cannot be null: " [(boolean p)
@@ -175,14 +177,14 @@
   (let [[x y z] [(js/Math.sin now)
                  (js/Math.cos now)
                  (js/Math.sin (* now 2))]]
-    {u-p-matrix           p
-     u-mv-matrix          mv
+    {u-p-matrix           (object-array p)
+     u-mv-matrix          (object-array mv)
      u-n-matrix           (get-normal-matrix mv)
-     u-ambient-color      [0.5 0.5 0.5]
-     u-lighting-direction [-0.25 0.25 1]
-     u-directional-color  [0 0 0]
+     u-ambient-color      #js [0.5 0.5 0.5]
+     u-lighting-direction #js [-0.25 0.25 1]
+     u-directional-color  #js [0 0 0]
      u-use-lighting       true
-     u-light-angle        [x y z] ;;[1 1 1]
+     u-light-angle        #js [x y z] ;;[1 1 1]
      u-diffuse            (or diffuse [1 1 0 1])
      a-position           vertices
      a-vertex-normal      normals
@@ -248,10 +250,12 @@
 
 (defn draw-sky-box [driver program p sky-box ax ay]
   (let [mv         (-> (rotate-x-y ax ay)
-                       (geom/invert))
-        final-data (select-keys {u-p-matrix                  p
+                     (geom/invert)
+                     (object-array))
+        final-data (select-keys {u-p-matrix                  (object-array p)
                                  u-sky-box-sampler           sky-box
                                  a-sky-box-position          {:data [-1 -1, 3 -1, -1 3]
+                                                              :id :sky-box-position
                                                               :immutable? true
                                                               :count 3}
                                  u-sky-box-inverse-mv-matrix mv}
@@ -431,7 +435,7 @@
                                                                                          (assoc-in [:gltf] gltf)
                                                                                          (assoc-in [:skybox :texture] cube-texture)))))
                                            #_(animate (draw-fn gl driver) tick (-> state
-                                                                                   (assoc-in [:gltf] gltf)
+                                                                                 (assoc-in [:gltf] gltf)
                                                                                    (assoc-in [:skybox :texture] cube-texture)))))))))
     
     (let [keycodes {37 :left

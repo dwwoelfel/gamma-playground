@@ -10,8 +10,8 @@
             [gampg.learn-gamma.lesson-09 :as lg09]
             [gampg.learn-gamma.lesson-10 :as lg10]
             [gampg.learn-gamma.lesson-11 :as lg11]
-            [gampg.learn-gamma.lesson-12 :as lg12]
-            [gampg.learn-gamma.lesson-13 :as lg13]
+            ;; [gampg.learn-gamma.lesson-12 :as lg12]
+            ;; [gampg.learn-gamma.lesson-13 :as lg13]
             ;;[gampg.learn-gamma.lesson-20 :as lg20]
             [gampg.learn-gamma.apartment :as lg-apartment]
             [gampg.learn-gamma.gltf :as lg-gltf]
@@ -25,12 +25,12 @@
 ;; XXX: We're not properly reusing gl context's here, hurts fighweel's
 ;; reloadability
 (def title   lg-apartment/title)
-(def prog    lg-apartment/program-source)
+(def prog    lg-apartment/program-texture-light)
 (def gl-main lg-apartment/main)
 
-;; (def title   lg20/title)
-;; (def prog    lg20/program-sky-box)
-;; (def gl-main lg20/main)
+;; (def title   lg04/title)
+;; (def prog    lg04/program-source)
+;; (def gl-main lg04/main)
 
 (defonce app-state (atom {:live {}}))
 
